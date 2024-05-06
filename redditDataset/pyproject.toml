@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "redditdataset"
+version = "0.1.0"
+description = ""
+authors = ["TheophileBERTELOOT <thber64@ulaval.ca>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+gather = "redditdataset.main:cli"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+praw = "^7.7.1"
+pymongo = "^4.7.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
