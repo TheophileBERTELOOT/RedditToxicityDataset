@@ -2,8 +2,13 @@
 name = "redditdataset"
 version = "0.1.0"
 description = ""
-authors = ["TheophileBERTELOOT <thber64@ulaval.ca>"]
+authors = ["Theophile BERTELOOT <thber64@ulaval.ca>"]
+maintainers = [
+    "Theophile BERTELOOT <thber64@ulaval.ca>",
+    "Loïc Baret <baret.loic.1@gmail.com>",
+]
 readme = "README.md"
+packages = [{include = "redditdataset", from = "redditDataset"}]
 
 [tool.poetry.scripts]
 gather = "redditdataset.main:cli"
