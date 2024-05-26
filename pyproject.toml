@@ -2,7 +2,10 @@
 name = "redditdataset"
 version = "0.1.0"
 description = ""
-authors = ["Theophile BERTELOOT <thber64@ulaval.ca>"]
+authors = [
+    "Theophile BERTELOOT <thber64@ulaval.ca>",
+    "Loïc Baret <baret.loic.1@gmail.com>",
+]
 maintainers = [
     "Theophile BERTELOOT <thber64@ulaval.ca>",
     "Loïc Baret <baret.loic.1@gmail.com>",
