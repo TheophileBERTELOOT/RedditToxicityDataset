@@ -1,30 +1,36 @@
 import json
+from Gatherer import Gatherer
+from MongoHandler import MongoHandler
 
-import praw
+from Enums.SubredditGathering import SubredditGathering
+from Enums.SubmissionsGathering import SubmissionGathering
+from Enums.CollectionsNames import CollectionNames
 
 # FIXME : better with environment variables and not a json file.
-with open("/home/lbaret/projects/RedditToxicityDataset/redditDataset/redditdataset/config.json", "r") as jsonfile:
-    config = json.load(jsonfile)
-    
-# with open("../../../config.json", "r") as jsonfile:
+# with open("/home/lbaret/projects/RedditToxicityDataset/redditDataset/redditdataset/config.json", "r") as jsonfile:
 #     config = json.load(jsonfile)
+    
+with open("../../../config.json", "r") as jsonfile:
+    config = json.load(jsonfile)
+
+mongo = MongoHandler(verbose=True)
 
 def cli():
-    reddit = praw.Reddit(
-        client_id=config['client_id'],
-        client_secret=config['client_secret'],
-        password=config['password'],
-        user_agent="Comment Extraction (by u/Lobarten and u/DrMygalon)",
-        username=config['username'],
-    )
-
-    subreddits = reddit.subreddits.popular()
+    gatherer = Gatherer(config)
+    subreddits = gatherer.fetchSubreddits(SubredditGathering.Popular,nbLimit=1)
     for subreddit in subreddits:
-        print(f"From : {subreddit.title}")
-        for comment in subreddit.comments(limit=5):
-            print(comment.author)
-        
-        print(f"End for : {subreddit.title}\n")
+        gatherer.extractSubredditInfo(subreddit)
+        submissions = gatherer.fetchSubmissions(subreddit,SubmissionGathering.Hot,nbLimit=1)
+        for submission in submissions:
+            gatherer.extractAuthorInfos(submission.author)
+            comments = gatherer.fetchComments(submission)
+            gatherer.extractCommentsInfos(comments)
+        mongo.exportAuthorsInfos(gatherer.extractedAuthors)
+        mongo.exportCommentsInfos(gatherer.extractedComments)
+        mongo.exportSubredditInfos(gatherer.subreddit)
+        gatherer.resetBuffers()
+    mongo.sampleComments()
+    mongo.removeEverythingFromCollection(CollectionNames.Comments)
 
 if __name__ == "__main__":
     cli()
