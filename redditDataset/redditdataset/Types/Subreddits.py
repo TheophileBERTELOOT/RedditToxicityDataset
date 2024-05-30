@@ -11,6 +11,12 @@ class Subreddits:
         self.name:str = self.subreddit.name
         self.createdTime:str = self.subreddit.created_utc
         self.subscribers:int=self.subreddit.subscribers
+        self.moderators = []
+        self.rules = []
+        for moderator in self.subreddit.moderator():
+            self.moderators.append(moderator)
+        for rule in self.subreddit.rules:
+            self.rules.append(rule)
 
 
     def getDict(self):
@@ -19,4 +25,6 @@ class Subreddits:
                 'name':self.name,
                 'createdTime':self.createdTime,
                 'subscribers':self.subscribers,
+                'moderators':self.moderators,
+                'rules':self.rules
                 }

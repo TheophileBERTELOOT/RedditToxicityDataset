@@ -61,7 +61,7 @@ class Gatherer:
                 return False
             
     
-    def fetchComments(self, submission:praw.models.Submission):
+    def fetchComments(self, submission:praw.models.Submission,nbLimit:int|None=None):
         comments = submission.comments
         comments.replace_more(limit=None)
         return comments.list()
@@ -75,8 +75,10 @@ class Gatherer:
     def extractCommentsInfos(self,comments:typing.Iterator[praw.models.Comment]):
         for comment in comments:
             self.extractedComments.append(Comments(comment))
+            self.extractAuthorInfos(comment.author)
             
     def extractSubredditInfo(self,subreddit:praw.models.Subreddit):
         self.subreddit = Subreddits(subreddit)
+        
                 
         

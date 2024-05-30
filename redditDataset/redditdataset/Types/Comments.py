@@ -6,8 +6,11 @@ class Comments:
         self.fillInfos()
     
     def fillInfos(self):
+        try:
+            self.authorId:str = self.comment.author.id
+        except:
+            self.authorId:str = ''
         self.id:str = self.comment.id
-        self.authorId:str = self.comment.author.id
         self.message:str = self.comment.body
         self.createdTime:str = self.comment.created_utc
         self.distinguished:bool=self.comment.distinguished

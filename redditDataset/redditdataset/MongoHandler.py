@@ -101,13 +101,29 @@ class MongoHandler:
             return False
             
     def sampleComments(self):
-        res = self.myCols[CollectionNames.Comments.value].find()
+        res = self.myCols[CollectionNames.Comments.value].find().limit(10)
         for comment in res :
             print('__________________________________')
             print(comment)
             
+    def sampleSubreddits(self):
+        res = self.myCols[CollectionNames.Subreddits.value].find().limit(10)
+        for subreddit in res :
+            print('__________________________________')
+            print(subreddit)
+            
+    def sampleAuthors(self):
+        res = self.myCols[CollectionNames.Authors.value].find().limit(10)
+        for author in res :
+            print('__________________________________')
+            print(author)
+            
     def removeEverythingFromCollection(self,collectionName:CollectionNames):
         self.myCols[collectionName.value].delete_many({})
+        
+    def removeEverythingFromEveryCollection(self):
+        for collection in CollectionNames :
+            self.myCols[collection.value].delete_many({})
             
     
     

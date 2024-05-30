@@ -20,7 +20,7 @@ def cli():
     subreddits = gatherer.fetchSubreddits(SubredditGathering.Popular,nbLimit=1)
     for subreddit in subreddits:
         gatherer.extractSubredditInfo(subreddit)
-        submissions = gatherer.fetchSubmissions(subreddit,SubmissionGathering.Hot,nbLimit=1)
+        submissions = gatherer.fetchSubmissions(subreddit,SubmissionGathering.Hot,nbLimit=2)
         for submission in submissions:
             gatherer.extractAuthorInfos(submission.author)
             comments = gatherer.fetchComments(submission)
@@ -30,7 +30,10 @@ def cli():
         mongo.exportSubredditInfos(gatherer.subreddit)
         gatherer.resetBuffers()
     mongo.sampleComments()
-    mongo.removeEverythingFromCollection(CollectionNames.Comments)
+    mongo.sampleAuthors()
+    mongo.sampleSubreddits()
+    mongo.removeEverythingFromEveryCollection()
+
 
 if __name__ == "__main__":
     cli()
