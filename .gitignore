@@ -1,3 +1,7 @@
+# Mongo DB data persistence
+mongo/*
+!mongo/.gitkeep
+
 # pyenv python version
 .python-version
 
