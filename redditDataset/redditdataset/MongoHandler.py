@@ -1,10 +1,10 @@
 import pymongo
 import copy
 
-from Types.Authors import Author
-from Types.Comments import Comments
-from Types.Subreddits import Subreddits
-from Enums.CollectionsNames import CollectionNames
+from redditDataset.redditdataset.Types.Authors import Author
+from redditDataset.redditdataset.Types.Comments import Comments
+from redditDataset.redditdataset.Types.Subreddits import Subreddits
+from redditDataset.redditdataset.Enums.CollectionsNames import CollectionNames
 
 class MongoHandler:
     def __init__(self,dbName='RedditToxicity',
@@ -101,18 +101,21 @@ class MongoHandler:
             return False
             
     def sampleComments(self):
+        print('comments examples : ')
         res = self.myCols[CollectionNames.Comments.value].find().limit(10)
         for comment in res :
             print('__________________________________')
             print(comment)
             
     def sampleSubreddits(self):
+        print('subreddits examples : ')
         res = self.myCols[CollectionNames.Subreddits.value].find().limit(10)
         for subreddit in res :
             print('__________________________________')
             print(subreddit)
             
     def sampleAuthors(self):
+        print('authors examples : ')
         res = self.myCols[CollectionNames.Authors.value].find().limit(10)
         for author in res :
             print('__________________________________')

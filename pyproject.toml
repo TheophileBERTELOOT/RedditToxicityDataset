@@ -14,7 +14,7 @@ readme = "README.md"
 packages = [{include = "redditdataset", from = "redditDataset"}]
 
 [tool.poetry.scripts]
-gather = "redditdataset.main:cli"
+gather = "redditDataset.redditdataset.main:cli"
 
 [tool.poetry.dependencies]
 python = "^3.10"

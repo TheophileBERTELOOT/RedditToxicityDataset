@@ -1,12 +1,13 @@
 import praw
 import typing 
+from datetime import datetime, timedelta
 
-from Types.Authors import Author
-from Types.Comments import Comments
-from Types.Subreddits import Subreddits
+from redditDataset.redditdataset.Types.Authors import Author
+from redditDataset.redditdataset.Types.Comments import Comments
+from redditDataset.redditdataset.Types.Subreddits import Subreddits
 
-from Enums.SubredditGathering import SubredditGathering
-from Enums.SubmissionsGathering import SubmissionGathering
+from redditDataset.redditdataset.Enums.SubredditGathering import SubredditGathering
+from redditDataset.redditdataset.Enums.SubmissionsGathering import SubmissionGathering
 
 class Gatherer:
     def __init__(self,config):
@@ -65,6 +66,18 @@ class Gatherer:
         comments = submission.comments
         comments.replace_more(limit=None)
         return comments.list()
+    
+    def fetchCommentsLastXMinutes(self, submission:praw.models.Submission,nbLimit:int|None=None,timeDelta:int=1000):
+        now = datetime.utcnow()
+        time_threshold = now - timedelta(minutes=timeDelta)
+        time_threshold_timestamp = int(time_threshold.timestamp())
+        filteredComments = []
+        comments = submission.comments
+        comments.replace_more(limit=5)
+        for comment in comments.list():
+             if comment.created_utc >= time_threshold_timestamp:
+                 filteredComments.append(comment)
+        return filteredComments
             
     def extractAuthorInfos(self,author:praw.models.Redditor):
         authorObject = Author(author)
@@ -74,6 +87,8 @@ class Gatherer:
             
     def extractCommentsInfos(self,comments:typing.Iterator[praw.models.Comment]):
         for comment in comments:
+            print(comment.body)
+            print('-------------------')
             self.extractedComments.append(Comments(comment))
             self.extractAuthorInfos(comment.author)
             
