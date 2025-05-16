@@ -11,23 +11,23 @@ class Comments:
         except:
             self.authorId:str = ''
         self.id:str = self.comment.id
-        self.message:str = self.comment.body
-        self.createdTime:str = self.comment.created_utc
+        self.body:str = self.comment.body
+        self.created_utc:str = self.comment.created_utc
         self.distinguished:bool=self.comment.distinguished
-        self.submissionId:str = self.comment.link_id
-        self.parentId:str = self.comment.parent_id
+        self.link_id:str = self.comment.link_id
+        self.parent_id:str = self.comment.parent_id
         self.score:int = self.comment.score
-        self.subredditId:str = self.comment.subreddit_id
+        self.subreddit_id:str = self.comment.subreddit_id
 
 
     def getDict(self):
         return {'id':self.id,
                 'authorId':self.authorId,
-                'message':self.message,
-                'createdTime':self.createdTime,
+                'body':self.body,
+                'created_utc':self.created_utc,
                 'distinguished':self.distinguished,
-                'submissionId':self.submissionId,
-                'subredditId':self.subredditId,
-                'parentId':self.parentId,
+                'link_id':self.link_id,
+                'subreddit_id':self.subreddit_id,
+                'parent_id':self.parent_id,
                 'score':self.score,
                 }

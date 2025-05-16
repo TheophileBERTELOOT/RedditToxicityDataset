@@ -1,4 +1,5 @@
 import json
+import time
 
 from redditDataset.redditdataset.Enums.CollectionsNames import CollectionNames
 from redditDataset.redditdataset.Enums.SubmissionsGathering import SubmissionGathering
@@ -17,21 +18,27 @@ mongo = MongoHandler(verbose=True)
 
 def cli():
     gatherer = Gatherer(config)
-    subreddits = gatherer.fetchSubreddits(SubredditGathering.Popular, nbLimit=10)
+    subreddits = gatherer.fetchSubreddits(SubredditGathering.Popular, nbLimit=20)
     for subreddit in subreddits:
+        print('new subreddit : ' + subreddit.display_name)
         gatherer.extractSubredditInfo(subreddit)
-        submissions = gatherer.fetchSubmissions(subreddit,SubmissionGathering.Hot, nbLimit=10)
+        submissions = gatherer.fetchSubmissions(subreddit,SubmissionGathering.Hot, nbLimit=5)
         for submission in submissions:
-            gatherer.extractAuthorInfos(submission.author)
+            #gatherer.extractAuthorInfos(submission.author)
             comments = gatherer.fetchCommentsLastXMinutes(submission)
             gatherer.extractCommentsInfos(comments)
-        mongo.exportAuthorsInfos(gatherer.extractedAuthors)
-        mongo.exportCommentsInfos(gatherer.extractedComments)
+            time.sleep(1)
         mongo.exportSubredditInfos(gatherer.subreddit)
+        mongo.exportCommentsInfos(gatherer.extractedComments)
+        mongo.exportAuthorsInfos(gatherer.extractedAuthors)
+        time.sleep(1)
+        
+
         gatherer.resetBuffers()
-    mongo.sampleComments()
-    mongo.sampleAuthors()
-    mongo.sampleSubreddits()
+
+    #mongo.sampleComments()
+    #mongo.sampleAuthors()
+    #mongo.sampleSubreddits()
     # mongo.removeEverythingFromEveryCollection()
 
 

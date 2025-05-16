@@ -15,6 +15,7 @@ packages = [{include = "redditdataset", from = "redditDataset"}]
 
 [tool.poetry.scripts]
 gather = "redditDataset.redditdataset.main:cli"
+checkDeleted = "redditDataset.redditdataset.checkDeleted:cli"
 
 [tool.poetry.dependencies]
 python = "^3.10"

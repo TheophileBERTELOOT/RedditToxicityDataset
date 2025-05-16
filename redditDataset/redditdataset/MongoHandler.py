@@ -23,12 +23,14 @@ class MongoHandler:
         for name in self.collectionsNames:
             self.myCols[name] = self.mydb[name]
         if CollectionNames.Authors.value in self.collectionsNames and  CollectionNames.Authors.value in self.mydb.list_collection_names():
-            self.myCols[CollectionNames.Authors.value].create_index('id')  
+            self.myCols[CollectionNames.Authors.value].create_index('id',unique=True)  
         if CollectionNames.Comments.value in self.collectionsNames and  CollectionNames.Comments.value in self.mydb.list_collection_names():
-            self.myCols[CollectionNames.Comments.value].create_index('id')
+            self.myCols[CollectionNames.Comments.value].create_index('id',unique=True)
         if CollectionNames.Subreddits.value in self.collectionsNames and  CollectionNames.Subreddits.value in self.mydb.list_collection_names():
-            self.myCols[CollectionNames.Subreddits.value].create_index('id')
+            self.myCols[CollectionNames.Subreddits.value].create_index('id',unique=True)
             
+
+    '''
     def exportAuthorInfos(self,author:Author) -> bool:
         try :
             if CollectionNames.Authors.value in self.collectionsNames:
@@ -37,11 +39,41 @@ class MongoHandler:
                     self.myCols[CollectionNames.Authors.value].insert_one(author.getDict())
                     return True
                 else:
-                    print('Author already exist in the database')
+                    #print('Author already exist in the database')
                     return False
             else:
                 print('there is no Authors collection')
                 return False
+        except Exception as error :
+            print(error)
+            return False
+'''
+    def exportAuthorInfos(self,author:Author) -> bool:
+        try :
+            if CollectionNames.Authors.value in self.collectionsNames:
+                self.myCols[CollectionNames.Authors.value].insert_one(author.getDict())
+                return True
+            else:
+                print('there is no Authors collection')
+                return False
+        except Exception as error :
+            print(error)
+            return False
+
+    def addDeletedField(self,comment,deleted):
+        try :
+            self.myCols[CollectionNames.Comments.value].update_one({"_id": comment["_id"]},
+            {"$set": {"deleted": deleted}})
+            return True
+        except Exception as error :
+            print(error)
+            return False
+
+    def addDeletedBodyField(self,comment,newBody):
+        try :
+            self.myCols[CollectionNames.Comments.value].update_one({"_id": comment["_id"]},
+            {"$set": {"newBody": newBody}})
+            return True
         except Exception as error :
             print(error)
             return False
@@ -57,7 +89,7 @@ class MongoHandler:
                 counter +=1
         if self.verbose:
             print(f'{counter} authors exported succesfully')
-            
+    ''' 
     def exportCommentInfos(self,comment:Comments) -> bool:
         try :
             if CollectionNames.Comments.value in self.collectionsNames:
@@ -66,6 +98,14 @@ class MongoHandler:
             else:
                 print('there is no Comments collection')
                 return False
+        except Exception as error :
+            print(error)
+            return False
+    '''
+    def exportCommentInfos(self,comment:Comments) -> bool:
+        try :
+            self.myCols[CollectionNames.Comments.value].insert_one(comment.getDict())
+            return True
         except Exception as error :
             print(error)
             return False
@@ -83,7 +123,8 @@ class MongoHandler:
             print(f'{counter} comments exported succesfully')
             
     def exportSubredditInfos(self,subreddit:Subreddits) -> bool:
-
+        if self.verbose:
+            print('begin exporting subreddits infos :')
         try :
             doesSubredditAlreadyExist = len(list(self.myCols[CollectionNames.Subreddits.value].find({'id':subreddit.id}))) > 0
             if doesSubredditAlreadyExist:
@@ -127,7 +168,10 @@ class MongoHandler:
     def removeEverythingFromEveryCollection(self):
         for collection in CollectionNames :
             self.myCols[collection.value].delete_many({})
-            
+
+    def getAllNonCheckedComments(self):
+        res = list(self.myCols[CollectionNames.Comments.value].find({'deleted':{'$exists':False}}).limit(10000))
+        return res
     
     
         
