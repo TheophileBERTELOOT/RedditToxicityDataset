@@ -173,6 +173,18 @@ class MongoHandler:
         res = list(self.myCols[CollectionNames.Comments.value].find({'deleted':{'$exists':False}}).limit(10000))
         return res
     
+    def getAllCheckedComments(self):
+        res = list(self.myCols[CollectionNames.Comments.value].find({'newBody':{'$exists':True}}))
+        return res
+    
+    def addLabels(self,id,label):
+        try :
+            self.myCols[CollectionNames.Comments.value].update_one({"_id": id},
+            {"$set": {"label": label}})
+            return True
+        except Exception as error :
+            print(error)
+            return False
     
         
             
