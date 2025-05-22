@@ -22,7 +22,9 @@ def cli():
     gatherer = Gatherer(config)
 
     comments = mongo.getAllNonCheckedComments()
-
+    i = 0
+    percent = 0
+    centil = len(comments)/100
     for comment in comments:
         try :
             newComment = gatherer.getCommentById(comment['id'])
@@ -34,6 +36,10 @@ def cli():
                     mongo.addDeletedField(comment,'Not Deleted')
             else:
                 mongo.addDeletedField(comment,'Not Deleted')
+            if i/len(comments) > percent/100:
+                percent +=1
+                print(f'fini {percent}% plus que {len(comments)-i} lignes')
         except:
             print('Issue with api')
             time.sleep(10)
+        i+=1

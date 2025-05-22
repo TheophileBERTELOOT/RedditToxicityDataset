@@ -170,7 +170,7 @@ class MongoHandler:
             self.myCols[collection.value].delete_many({})
 
     def getAllNonCheckedComments(self):
-        res = list(self.myCols[CollectionNames.Comments.value].find({'deleted':{'$exists':False}}).limit(10000))
+        res = list(self.myCols[CollectionNames.Comments.value].find({'deleted':{'$exists':False}}))
         return res
     
     def getAllCheckedComments(self):

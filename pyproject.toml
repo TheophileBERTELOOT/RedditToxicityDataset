@@ -18,6 +18,7 @@ gather = "redditDataset.redditdataset.main:cli"
 checkDeleted = "redditDataset.redditdataset.checkDeleted:cli"
 classification = "redditDataset.Classification.main:cli"
 fixLabels = "redditDataset.redditdataset.checkDeleted:fixLabels"
+transformInConversationDataset = "redditDataset.Classification.dataset.transformDatasetInConversationDataset:cli"
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -27,6 +28,7 @@ click = "^8.2.0"
 torch = "^2.7.0"
 torch-geometric = "^2.6.1"
 sentence-transformers = "^4.1.0"
+pandas = "^2.2.3"
 
 
 [tool.poetry.dev-dependencies]
